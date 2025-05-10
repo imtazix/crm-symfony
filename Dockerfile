@@ -5,8 +5,8 @@ RUN apt-get update && apt-get install -y \
     libicu-dev libzip-dev zip unzip git curl libonig-dev libpq-dev \
     && docker-php-ext-install intl pdo pdo_mysql zip opcache
 
-# Activer mod_rewrite d'Apache
-RUN a2enmod rewrite
+# Activer mod_rewrite ET mod_headers pour JWT
+RUN a2enmod rewrite headers
 
 # Copier Composer depuis l'image officielle
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -21,7 +21,7 @@ COPY . .
 # Fixer les permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Mettre à jour la configuration Apache pour servir le dossier public/
+# Redéfinir le dossier public/ comme racine Apache
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
 # Définir l'environnement
