@@ -1,6 +1,9 @@
+version: '3.8'
+
 services:
   app:
     build: .
+    container_name: crm-symfony-app
     ports:
       - "8000:80"
     volumes:
@@ -14,6 +17,7 @@ services:
 
   db:
     image: mysql:8.0
+    container_name: crm-symfony-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
