@@ -28,5 +28,6 @@ interface ClientServiceInterface
     public function createFactureForClient(int $clientId, array $data, User $user): ?\App\Entity\Facture;
     public function updateFacture(int $factureId, array $data, User $user): ?\App\Entity\Facture;
     public function deleteFacture(int $factureId, User $user): bool;
+    
 
 }

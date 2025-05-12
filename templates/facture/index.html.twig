@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Factures du client #{{ client_id }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-info">
+        <i class="bi bi-file-earmark-text"></i> Factures du client #{{ client_id }}
+    </h2>
+
+    <div class="mb-3 d-flex justify-content-between">
+        <a href="{{ path('facture_new', {'id': client_id}) }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Ajouter une facture
+        </a>
+        <a href="{{ path('client_index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour à la liste des clients
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Numéro</th>
+                <th>Date</th>
+                <th>Montant</th>
+                <th>État</th>
+                <th>Commentaire</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for facture in factures %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ facture.numero }}</td>
+                    <td>{{ facture.date }}</td>
+                    <td>{{ facture.montant }} MAD</td>
+                    <td>{{ facture.etat }}</td>
+                    <td>{{ facture.commentaire }}</td>
+                    <td>
+                        <a href="{{ path('facture_edit', { 'id': facture.id }) }}?client_id={{ client_id }}"
+                           class="btn btn-sm btn-warning" title="Modifier">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{{ path('facture_delete', { 'id': facture.id }) }}"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Confirmez-vous la suppression ?')"
+                           title="Supprimer">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-muted">Aucune facture disponible.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la Facture #{{ facture.id }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-warning">
+        <i class="bi bi-pencil-square"></i> Modifier la Facture #{{ facture.id }}
+    </h2>
+
+    <form method="POST" action="{{ path('facture_edit', {'id': facture.id}) }}">
+        <input type="hidden" name="client_id" value="{{ facture.client_id|default(client_id) }}"/>
+
+        <div class="form-group mb-3">
+            <label>Numéro</label>
+            <input type="text" name="numero" class="form-control" value="{{ facture.numero }}" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Date</label>
+            <input type="date" name="date" class="form-control" value="{{ facture.date }}" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Montant (MAD)</label>
+            <input type="number" step="0.01" name="montant" class="form-control" value="{{ facture.montant }}" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>État</label>
+            <select name="etat" class="form-control">
+                <option value="Payée" {% if facture.etat == 'Payée' %}selected{% endif %}>Payée</option>
+                <option value="En attente" {% if facture.etat == 'En attente' %}selected{% endif %}>En attente</option>
+                <option value="Annulée" {% if facture.etat == 'Annulée' %}selected{% endif %}>Annulée</option>
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Commentaire</label>
+            <textarea name="commentaire" class="form-control">{{ facture.commentaire }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-warning">
+            <i class="bi bi-save"></i> Modifier la facture
+        </button>
+        <a href="{{ path('client_factures', {'id': facture.client_id|default(client_id)}) }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Annuler
+        </a>
+    </form>
+</div>
+{% endblock %}

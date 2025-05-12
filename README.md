@@ -82,10 +82,7 @@ POST http://localhost:8000/api/login
 ### Corps de la requête (JSON) :
 
 ```json
-{
-  "identifiant": "admin",
-  "password": "admin123"
-}
+
 ```
 
 ### Réponse attendue :

@@ -168,6 +168,7 @@ class ClientService implements ClientServiceInterface
         $this->em->flush();
         return true;
     }
+    
 
 
 }
