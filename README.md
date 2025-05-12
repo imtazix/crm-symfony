@@ -1,71 +1,50 @@
-# CRM Symfony - Projet Dockerisé 🐳
+# CRM Symfony - Gestion des Clients et Factures
 
-Ce projet est une application CRM développée avec **Symfony 6+** et **Docker**.  
-Il inclut un système d'authentification par **JWT (LexikJWT)**, la gestion des **utilisateurs**, **clients** et **factures**.
+Ce projet Symfony permet de gérer des clients et leurs factures à travers une API sécurisée par JWT, ainsi qu'une interface utilisateur complète en Twig/Bootstrap.
 
----
+## ✅ Technologies utilisées
 
-##  Lancement du projet
+* PHP 8.2
+* Symfony 6+
+* MySQL 8
+* Docker / Docker Compose
+* JWT (LexikJWTAuthenticationBundle)
+* Twig + Bootstrap 5
 
-### 1. Cloner le dépôt
+## 🔥 Développé par
+
+**Mohamed El Outmani**
+
+## ⚙️ Installation via Docker
+
+1. Clonez le projet :
 
 ```bash
 git clone https://github.com/imtazix/crm-symfony.git
 cd crm-symfony
 ```
 
-### 2. Lancer les conteneurs Docker
+2. Lancez Docker :
 
 ```bash
 docker compose up -d --build
 ```
 
----
+Cela va :
 
-## 🐘 Services Docker
+* Créer les conteneurs `crm-symfony-app` et `crm-symfony-db`
+* Exposer l'app Symfony sur `http://localhost:8000`
 
-| Service | Description         | Port             |
-|---------|---------------------|------------------|
-| app     | PHP 8.2 + Apache    | `localhost:8000` |
-| db      | MySQL 8.0           | `localhost:3306` |
-
----
-
-##  Accès à l'application
-
-- Accès web : [http://localhost:8000/login](http://localhost:8000/login)
-- Identifiants de connexion :
-
-```text
-Identifiant : admin
-Mot de passe : admin123
-```
-
----
-
-##  Commandes à exécuter dans le conteneur
-
-### 1. Entrer dans le conteneur app
+3. Accédez au conteneur PHP pour lancer les commandes :
 
 ```bash
 docker exec -it crm-symfony-app bash
 ```
 
-### 2. Installer les dépendances PHP
-
-```bash
-composer install
-```
-
-### 3. Appliquer les migrations
+4. Exécutez les migrations + fixtures :
 
 ```bash
 php bin/console doctrine:migrations:migrate
-```
-
-### 4. Charger les fixtures (admin, client, facture)
-
-```bash
 php bin/console doctrine:fixtures:load
 ```
 
@@ -138,7 +117,7 @@ docker compose down -v
 
 ## 👨‍💻 Auteur
 
-**Mohamed el outmani**  
+**Mohamed Belmadani**  
 Projet Examen Symfony - DevOps 2025  
 GitHub : [imtazix](https://github.com/imtazix)
 
