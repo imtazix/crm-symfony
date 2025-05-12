@@ -138,7 +138,7 @@ docker compose down -v
 
 ## 👨‍💻 Auteur
 
-**Mohamed Belmadani**  
+**Mohamed el outmani**  
 Projet Examen Symfony - DevOps 2025  
 GitHub : [imtazix](https://github.com/imtazix)
 
