@@ -14,13 +14,14 @@ pipeline {
             }
         }
 
-        stage('Composer install') {
-            steps {
-                sh 'composer install'
-                sh 'php bin/console cache:clear'
+     stage('Composer install') {
+            agent {
+                docker {
+                    image 'composer:2' // image officielle avec PHP et Composer
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
             }
-        }
-
+     }
         stage('Analyse SonarQube') {
             steps {
                 withSonarQubeEnv('SonarQube') {
