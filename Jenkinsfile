@@ -2,53 +2,47 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('sonarqube-token')
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        SONAR_HOST_URL = 'http://localhost:9000'
+        SONAR_LOGIN = 'squ_3b87e461253f8d6c08a4a9dbd83ae2f69c1cfe17' // Ton token Sonar
+        DOCKER_IMAGE = 'elmahdi29/crm-symfony'
     }
 
     stages {
-        stage('Cloner le projet') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/imtazix/crm-symfony.git'
+                git credentialsId: 'github-creds', url: 'https://github.com/imtazix/crm-symfony.git', branch: 'main'
             }
         }
 
         stage('Composer install') {
             steps {
-                sh 'docker-compose run --rm php composer install'
+                sh 'composer install'
+                sh 'php bin/console cache:clear'
             }
         }
 
         stage('Analyse SonarQube') {
             steps {
-                withSonarQubeEnv('MySonarQube') {
-                    sh """
-                        sonar-scanner \
-                        -Dsonar.projectKey=crm-symfony \
-                        -Dsonar.sources=src \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=${SONAR_TOKEN}
-                    """
+                withSonarQubeEnv('SonarQube') {
+                    sh 'sonar-scanner'
                 }
             }
         }
 
         stage('Build Docker image') {
             steps {
-                sh 'docker build -t imtazix/crm-symfony .'
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
         stage('Push DockerHub') {
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker push imtazix/crm-symfony'
-            }
-        }
-
-        stage('Déploiement avec Ansible') {
-            steps {
-                sh 'ansible-playbook -i inventory.ini deploy.yml'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $DOCKER_IMAGE
+                    '''
+                }
             }
         }
     }
