@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONAR_HOST_URL = 'http://localhost:9000'
-        SONAR_LOGIN = 'squ_3b87e461253f8d6c08a4a9dbd83ae2f69c1cfe17' // Ton token Sonar
+        SONAR_LOGIN = 'squ_3b87e461253f8d6c08a4a9dbd83ae2f69c1cfe17'
         DOCKER_IMAGE = 'elmahdi29/crm-symfony'
     }
 
@@ -14,14 +14,19 @@ pipeline {
             }
         }
 
-     stage('Composer install') {
+        stage('Composer install') {
             agent {
                 docker {
                     image 'composer:2' // image officielle avec PHP et Composer
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
-     }
+            steps {
+                sh 'composer install'
+                sh 'php bin/console cache:clear || true'
+            }
+        }
+
         stage('Analyse SonarQube') {
             steps {
                 withSonarQubeEnv('SonarQube') {
