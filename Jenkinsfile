@@ -67,10 +67,11 @@ pipeline {
             }
         }
 
-        stage('Déploiement Ansible') {
-            steps {
-                sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
-            }
-        }
+       stage('Déploiement Ansible') {
+    steps {
+        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
+    }
+}
+
     }
 }
