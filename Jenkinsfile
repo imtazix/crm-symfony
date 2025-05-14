@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_ENV = 'SonarQube' // doit correspondre exactement au nom défini dans Jenkins
+        SONAR_HOST_URL = 'http://localhost:9000'
+        SONAR_LOGIN = 'squ_3b87e461253f8d6c08a4a9dbd83ae2f69c1cfe17'
         DOCKER_IMAGE = 'elmahdi29/crm-symfony'
     }
 
@@ -17,7 +18,6 @@ pipeline {
             agent {
                 docker {
                     image 'composer:2'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
@@ -27,9 +27,18 @@ pipeline {
         }
 
         stage('Analyse SonarQube') {
+            environment {
+                PATH = "/opt/sonar-scanner/bin:$PATH" // assure le chemin correct si nécessaire
+            }
             steps {
-                withSonarQubeEnv("${env.SONARQUBE_ENV}") {
-                    sh 'sonar-scanner'
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                        sonar-scanner \
+                        -Dsonar.projectKey=crm-symfony \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=$SONAR_HOST_URL \
+                        -Dsonar.login=$SONAR_LOGIN
+                    '''
                 }
             }
         }
