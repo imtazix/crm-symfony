@@ -13,6 +13,3 @@
       copy:
         src: ../docker-compose.yml
         dest: /opt/crm-symfony/docker-compose.yml
-
-    - name: Lancer le conteneur Docker Compose
-      shell: docker compose -f /opt/crm-symfony/docker-compose.yml up -d --build
