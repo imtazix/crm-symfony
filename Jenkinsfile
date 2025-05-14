@@ -4,7 +4,8 @@ pipeline {
     environment {
         SONAR_HOST_URL = 'http://localhost:9000'
         SONAR_LOGIN = 'squ_3b87e461253f8d6c08a4a9dbd83ae2f69c1cfe17'
-        DOCKER_IMAGE = 'elmahdi29/crm-symfony'
+        DOCKER_IMAGE = 'mahdimaadhadh/crm-symfony'
+'
     }
 
     stages {
