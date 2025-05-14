@@ -17,7 +17,8 @@ pipeline {
         stage('Composer install') {
             agent {
                 docker {
-                    image 'composer:2'
+                    image 'composer:2.5'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
@@ -45,17 +46,23 @@ pipeline {
 
         stage('Build Docker image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                retry(3) {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        sh 'docker build -t $DOCKER_IMAGE .'
+                    }
+                }
             }
         }
 
         stage('Push DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push $DOCKER_IMAGE
-                    '''
+                    retry(2) {
+                        sh '''
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push $DOCKER_IMAGE
+                        '''
+                    }
                 }
             }
         }
