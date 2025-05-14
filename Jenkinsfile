@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_ENV = 'SonarQube' // nom configuré dans Jenkins > Manage Jenkins > SonarQube Servers
+        SONARQUBE_ENV = 'SonarQube' // doit correspondre exactement au nom défini dans Jenkins
         DOCKER_IMAGE = 'elmahdi29/crm-symfony'
     }
 
