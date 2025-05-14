@@ -1,12 +1,10 @@
----
 - name: Déploiement de l'application Symfony
-  hosts: local
-  become: false
-
+  hosts: localhost
+  become: true  # <--- AJOUTE CETTE LIGNE
   tasks:
     - name: Copier le code Symfony localement
       synchronize:
-        src: ../
+        src: ..
         dest: /opt/crm-symfony/
         recursive: yes
         delete: yes
@@ -16,6 +14,5 @@
         src: ../docker-compose.yml
         dest: /opt/crm-symfony/docker-compose.yml
 
-    - name: Lancer le docker-compose
+    - name: Lancer le conteneur Docker Compose
       shell: docker compose -f /opt/crm-symfony/docker-compose.yml up -d --build
-
