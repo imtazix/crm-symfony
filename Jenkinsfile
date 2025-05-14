@@ -5,7 +5,6 @@ pipeline {
         SONAR_HOST_URL = 'http://localhost:9000'
         SONAR_LOGIN = 'squ_3b87e461253f8d6c08a4a9dbd83ae2f69c1cfe17'
         DOCKER_IMAGE = 'mahdimaadhadh/crm-symfony'
-'
     }
 
     stages {
@@ -29,7 +28,7 @@ pipeline {
 
         stage('Analyse SonarQube') {
             environment {
-                PATH = "/opt/sonar-scanner/bin:$PATH" // assure le chemin correct si nécessaire
+                PATH = "/opt/sonar-scanner/bin:$PATH" // adapte ce chemin si sonar-scanner est ailleurs
             }
             steps {
                 withSonarQubeEnv('SonarQube') {
