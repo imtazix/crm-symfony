@@ -28,7 +28,7 @@ pipeline {
 
         stage('Analyse SonarQube') {
             environment {
-                PATH = "/opt/sonar-scanner/bin:$PATH" // adapte ce chemin si sonar-scanner est ailleurs
+                PATH = "/opt/sonar-scanner/bin:$PATH"
             }
             steps {
                 withSonarQubeEnv('SonarQube') {
@@ -57,6 +57,12 @@ pipeline {
                         docker push $DOCKER_IMAGE
                     '''
                 }
+            }
+        }
+
+        stage('Déploiement Ansible') {
+            steps {
+                sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
             }
         }
     }
