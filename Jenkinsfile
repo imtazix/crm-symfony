@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONAR_HOST_URL = 'http://localhost:9000'
-        SONAR_LOGIN = 'squ_3b87e461253f8d6c08a4a9dbd83ae2f69c1cfe17'
+        SONARQUBE_ENV = 'SonarQube' // nom configuré dans Jenkins > Manage Jenkins > SonarQube Servers
         DOCKER_IMAGE = 'elmahdi29/crm-symfony'
     }
 
@@ -17,7 +16,7 @@ pipeline {
         stage('Composer install') {
             agent {
                 docker {
-                    image 'composer:2' // image officielle avec PHP et Composer
+                    image 'composer:2'
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
@@ -29,7 +28,7 @@ pipeline {
 
         stage('Analyse SonarQube') {
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv("${env.SONARQUBE_ENV}") {
                     sh 'sonar-scanner'
                 }
             }
