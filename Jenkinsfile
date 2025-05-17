@@ -66,6 +66,15 @@ pipeline {
                 }
             }
         }
+        stage('Préparer connexion SSH') {
+    steps {
+        sh '''
+            mkdir -p ~/.ssh
+            ssh-keyscan -H 10.0.2.15 >> ~/.ssh/known_hosts
+        '''
+    }
+}
+
 
         stage('Déploiement Ansible distant') {
             steps {
