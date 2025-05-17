@@ -11,7 +11,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 git credentialsId: 'github-creds', url: 'https://github.com/imtazix/crm-symfony.git', branch: 'main'
-                sh 'pwd'
             }
         }
 
@@ -23,7 +22,6 @@ pipeline {
                 }
             }
             steps {
-                sh 'pwd'
                 sh 'composer install'
                 sh 'php bin/console cache:clear || true'
             }
@@ -34,7 +32,6 @@ pipeline {
                 PATH = "/opt/sonar-scanner/bin:$PATH"
             }
             steps {
-                sh 'pwd'
                 withSonarQubeEnv('SonarQube') {
                     sh '''
                         sonar-scanner \
@@ -49,7 +46,6 @@ pipeline {
 
         stage('Build Docker image') {
             steps {
-                sh 'pwd'
                 retry(3) {
                     timeout(time: 5, unit: 'MINUTES') {
                         sh 'docker build -t $DOCKER_IMAGE .'
@@ -61,7 +57,6 @@ pipeline {
         stage('Push DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'pwd'
                     retry(2) {
                         sh '''
                             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
@@ -72,11 +67,11 @@ pipeline {
             }
         }
 
-       stage('Déploiement Ansible') {
-    steps {
-        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
-    }
-}
-
+        stage('Déploiement Ansible distant') {
+            steps {
+                sh 'pwd'  // pour vérifier le répertoire courant
+                sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
+            }
+        }
     }
 }
