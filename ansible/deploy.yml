@@ -27,6 +27,6 @@
         mode: '0644'
 
     - name: Lancer les conteneurs avec Docker Compose
-      command: docker-compose -f /opt/crm-symfony/docker-compose.yml up -d --build
+      command: docker compose -f docker-compose.yml up -d --build
       args:
         chdir: /opt/crm-symfony
