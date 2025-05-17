@@ -78,15 +78,18 @@ pipeline {
 
 
 
-       stage('Déploiement Ansible distant') {
+    stage('Déploiement Ansible distant') {
     steps {
         sh '''
             pwd
             export ANSIBLE_HOST_KEY_CHECKING=False
-            ansible-playbook -i ansible/inventory.ini ansible/deploy.yml --private-key=/var/lib/jenkins/.ssh/id_rsa
+            ansible-playbook -i ansible/inventory.ini ansible/deploy.yml \
+              --private-key=/var/lib/jenkins/.ssh/id_rsa \
+              -u mehdi
         '''
     }
 }
+
 
     }
 }
