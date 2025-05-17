@@ -1,0 +1,14 @@
+// src/Controller/MetricsController.php
+use Prometheus\CollectorRegistry;
+use Prometheus\RenderTextFormat;
+
+public function metrics()
+{
+    $registry = CollectorRegistry::getDefault();
+    $renderer = new RenderTextFormat();
+    return new Response(
+        $renderer->render($registry->getMetricFamilySamples()),
+        200,
+        ['Content-Type' => RenderTextFormat::MIME_TYPE]
+    );
+}
