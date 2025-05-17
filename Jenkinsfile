@@ -66,14 +66,16 @@ pipeline {
                 }
             }
         }
-        stage('Préparer connexion SSH') {
+      stage('Préparer connexion SSH') {
     steps {
         sh '''
             mkdir -p ~/.ssh
-            ssh-keyscan -H 10.0.2.15 >> ~/.ssh/known_hosts
+            ssh-keyscan 10.0.2.15 >> ~/.ssh/known_hosts
+            chmod 600 ~/.ssh/id_rsa || true
         '''
     }
 }
+
 
 
         stage('Déploiement Ansible distant') {
