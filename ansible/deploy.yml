@@ -1,19 +1,32 @@
+---
 - name: Déploiement de l'application Symfony
-  hosts: serveur
+  hosts: remote
   become: true
 
   tasks:
-    - name: Copier le projet Symfony
+    - name: Créer le dossier du projet sur le serveur distant
+      file:
+        path: /opt/crm-symfony
+        state: directory
+        mode: '0755'
+
+    - name: Copier le code Symfony sur le serveur distant
       synchronize:
-        src: ..
-        dest: /opt/crm-symfony/
-        recursive: yes
-        delete: yes
+        src: "{{ playbook_dir }}/.."
+        dest: /opt/crm-symfony
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=vendor"
+          - "--exclude=node_modules"
+          - "--exclude=.env.local"
 
     - name: Copier le fichier docker-compose.yml
       copy:
-        src: ../docker-compose.yml
+        src: "{{ playbook_dir }}/../docker-compose.yml"
         dest: /opt/crm-symfony/docker-compose.yml
+        mode: '0644'
 
-    - name: Lancer le conteneur avec Docker Compose
-      shell: docker compose -f /opt/crm-symfony/docker-compose.yml up -d --build
+    - name: Lancer les conteneurs avec Docker Compose
+      command: docker-compose -f /opt/crm-symfony/docker-compose.yml up -d --build
+      args:
+        chdir: /opt/crm-symfony
