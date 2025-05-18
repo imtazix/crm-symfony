@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   prometheus:
     image: prom/prometheus
@@ -44,4 +42,5 @@ volumes:
 
 networks:
   monitoring:
+    name: monitoring
     driver: bridge
