@@ -9,8 +9,8 @@ scrape_configs:
   - job_name: 'symfony-app'
     metrics_path: /metrics
     static_configs:
-      - targets: ['localhost:8000']
+      - targets: ['crm-symfony-app:80']
 
   - job_name: 'cadvisor'
     static_configs:
-      - targets: ['localhost:8080']
+      - targets: ['cadvisor:8080']
