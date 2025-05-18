@@ -14,6 +14,7 @@ services:
       DATABASE_URL: mysql://root:root@db:3306/crm_db
     networks:
       - crm
+      - monitoring  # 👈 ajout pour que Prometheus puisse y accéder
 
   db:
     image: mysql:8.0
@@ -34,7 +35,5 @@ volumes:
 
 networks:
   crm:
-  networks:
-  monitoring:
+  monitoring:  # 👈 correct et sans duplication
     external: true
-
