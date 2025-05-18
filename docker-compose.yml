@@ -34,3 +34,7 @@ volumes:
 
 networks:
   crm:
+  networks:
+  monitoring:
+    external: true
+
